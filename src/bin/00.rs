@@ -9,8 +9,10 @@ const DAY: &str = "NN"; // TODO: Fill the day
 const INPUT_FILE: &str = concatcp!("input/", DAY, ".txt");
 
 const TEST: &str = "\
-<TEST-INPUT>
-"; // TODO: Add the test input
+1abc2
+pqr3stu8vwx
+a1b2c3d4e5f
+treb7uchet"; // TODO: Add the test input
 
 fn main() -> Result<()> {
     start_day(DAY);
