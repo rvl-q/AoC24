@@ -5,6 +5,7 @@ use code_timing_macros::time_snippet;
 use const_format::concatcp;
 use adv_code_2024::*;
 
+// Playground
 const DAY: &str = "00"; // TODOne: Fill the day
 const INPUT_FILE: &str = concatcp!("input/", DAY, ".txt");
 
