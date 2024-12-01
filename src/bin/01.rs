@@ -31,29 +31,19 @@ fn main() -> Result<()> {
             match line {
                 std::result::Result::Ok(l) => {
                     let parts: Vec<&str> = l.split("   ").collect();
-                    //println!("yes, {}, {}, {}", l, parts[0], parts[1]);
-                    //let x: usize = parts[0].parse()?;
-                    //println!("{x}");
                     lefts.push(parts[0].parse()?);
                     rights.push(parts[1].parse()?);
-                    //answer += l2num(l.clone());
                 },
                 Err(e) => {
                     println!("oh no: {}", e);
                 }
             }
         }
-        //println!("{lefts:?}");
-        //println!("{rights:?}");
         lefts.sort();
         rights.sort();
-        //println!("{lefts:?}");
-        //println!("{rights:?}");
-        //let add = |a, b| a + b;
         let mut difs: Vec<i32> = Vec::new();
         lefts.iter().zip(rights.iter())
             .for_each(|(a, b)| difs.push(a - b));
-        //println!("{difs:?}");
         let mut answer = 0; //reader.lines().flatten().count();
         difs.into_iter()
             .for_each(|d| answer += d.abs());
@@ -89,12 +79,9 @@ fn main() -> Result<()> {
         lefts.sort();
         rights.sort();
         let mut ans = 0i32;
-        // let mut _prds: Vec<i32> = Vec::new();
         lefts.iter().for_each(
             |x| {
-                //print!("{x} ");
                 let n = rights.iter().filter(|&n| *n == *x).count();
-                //println!("{n}")
                 ans += x * n as i32
             }
         );
@@ -110,3 +97,12 @@ fn main() -> Result<()> {
 
     Ok(())
 }
+/*
+=== Part 1 ===
+src\bin\01.rs:57 took 1.0391ms.
+Result = 1603498
+
+=== Part 2 ===
+src\bin\01.rs:94 took 1.212ms.
+Result = 25574739
+ */
