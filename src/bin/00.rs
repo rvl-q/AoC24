@@ -5,7 +5,7 @@ use code_timing_macros::time_snippet;
 use const_format::concatcp;
 use adv_code_2024::*;
 
-const DAY: &str = "NN"; // TODO: Fill the day
+const DAY: &str = "00"; // TODO: Fill the day
 const INPUT_FILE: &str = concatcp!("input/", DAY, ".txt");
 
 const TEST: &str = "\
@@ -20,14 +20,34 @@ fn main() -> Result<()> {
     //region Part 1
     println!("=== Part 1 ===");
 
+    fn l2num(line: String) -> usize {
+        let mut ans = 0;
+        for ch in line.chars() {
+            println!("ch: {}, num? {}", ch, ch.is_ascii_digit());
+        }
+        ans
+    }
+
     fn part1<R: BufRead>(reader: R) -> Result<usize> {
         // TODO: Solve Part 1 of the puzzle
-        let answer = reader.lines().flatten().count();
+        let mut answer = 0;
+        for line in reader.lines(){
+            match line {
+                std::result::Result::Ok(l) => {
+                    println!("yes, {}", l);
+                    answer += l2num(l.clone());
+                },
+                Err(e) => {
+                    println!("oh no: {}", e);
+                }
+            }
+        }
+        //println!("{}", lines);
         Ok(answer)
     }
 
     // TODO: Set the expected answer for the test input
-    assert_eq!(0, part1(BufReader::new(TEST.as_bytes()))?);
+    assert_eq!(142, part1(BufReader::new(TEST.as_bytes()))?);
 
     let input_file = BufReader::new(File::open(INPUT_FILE)?);
     let result = time_snippet!(part1(input_file)?);
