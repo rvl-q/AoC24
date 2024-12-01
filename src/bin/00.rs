@@ -5,14 +5,14 @@ use code_timing_macros::time_snippet;
 use const_format::concatcp;
 use adv_code_2024::*;
 
-const DAY: &str = "00"; // TODO: Fill the day
+const DAY: &str = "00"; // TODOne: Fill the day
 const INPUT_FILE: &str = concatcp!("input/", DAY, ".txt");
 
 const TEST: &str = "\
 1abc2
 pqr3stu8vwx
 a1b2c3d4e5f
-treb7uchet"; // TODO: Add the test input
+treb7uchet"; // TODOne: Add the test input
 
 fn main() -> Result<()> {
     start_day(DAY);
@@ -46,7 +46,7 @@ fn main() -> Result<()> {
         Ok(answer)
     }
 
-    // TODO: Set the expected answer for the test input
+    // TODOne: Set the expected answer for the test input
     assert_eq!(142, part1(BufReader::new(TEST.as_bytes()))?);
 
     let input_file = BufReader::new(File::open(INPUT_FILE)?);
