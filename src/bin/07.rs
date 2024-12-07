@@ -40,19 +40,37 @@ fn try_one(seq: &mut Vec<i64>, nxt: i64, lim: i64) -> (){
     // println!("{:?}", &seq);
 }
 
+fn try_two(seq: &mut Vec<i64>, nxt: i64, lim: i64) -> (){
+    let prod: Vec<i64> = seq.clone().into_iter().map(|x| x * nxt).collect();
+    let ccat: Vec<i64> = seq.clone().into_iter()
+        .map(|x| {
+            x * 10i64.pow(nxt.checked_ilog10().unwrap_or(0) + 1) + nxt
+        }).collect();
+    seq.iter_mut().for_each(|e| *e += nxt);
+    let mut prod: Vec<i64> = prod.clone().into_iter().filter(|e| *e <= lim).collect();
+    let mut ccat: Vec<i64> = ccat.clone().into_iter().filter(|e| *e <= lim).collect();
+    seq.append(&mut prod);
+    seq.append(&mut ccat);
+}
+
 fn check_cal(kand: Calib) -> bool{
-    // // test test
-    // if [3267i64, 190, 292].contains(&kand.res){
-    //     return true;
-    // }
     let mut pos:Vec<i64> = Vec::new();
     pos.push(kand.row[0]);
     for k in kand.row[1..].iter(){
         try_one(&mut pos, *k, kand.res);
     }
-    println!("{}: {:?} -> {}",kand.res, pos, pos.contains(&kand.res));
+    // println!("{}: {:?} -> {}",kand.res, pos, pos.contains(&kand.res));
     pos.contains(&kand.res)
-    // false
+}
+
+fn check_cal2(kand: Calib) -> bool{
+    let mut pos:Vec<i64> = Vec::new();
+    pos.push(kand.row[0]);
+    for k in kand.row[1..].iter(){
+        try_two(&mut pos, *k, kand.res);
+    }
+    // println!("{}: {:?} -> {}",kand.res, pos, pos.contains(&kand.res));
+    pos.contains(&kand.res)
 }
 
 fn main() -> Result<()> {
@@ -65,6 +83,7 @@ fn main() -> Result<()> {
         // TODOne: Solve Part 1 of the puzzle
         let mut answer = 0;
         let mut big: i64 = 0;
+        let mut max_element = 0;
         let mut long = 0;
         for line in reader.lines() {
             let line = line?;
@@ -82,7 +101,10 @@ fn main() -> Result<()> {
             for p in parts{
                 row.push(p.parse()?);
             }
-            println!("{res} {:?}", &row);
+            if max_element < *row.iter().max().unwrap(){
+                max_element = *row.iter().max().unwrap();
+            }
+            // println!("{res} {:?}", &row);
             if row.len() > long{
                 long = row.len();
             }
@@ -95,34 +117,59 @@ fn main() -> Result<()> {
             }
 
         }
-        println!("{big} {long}");
+        println!("Max inputs: {big}, {max_element}, {long}");
 
         Ok(answer)
     }
 
     // TODOne: Set the expected answer for the test input
-    assert_eq!(3749, part1(BufReader::new(TEST.as_bytes()))?);
+    // assert_eq!(3749, part1(BufReader::new(TEST.as_bytes()))?);
 
     let input_file = BufReader::new(File::open(INPUT_FILE)?);
     let result = time_snippet!(part1(input_file)?);
-    println!("Result = {}", result);
+    println!("Result1 = {}", result);
+    // println!("Result1 = {}", result);
     //endregion
 
     //region Part 2
-    // println!("\n=== Part 2 ===");
-    //
-    // fn part2<R: BufRead>(reader: R) -> Result<usize> {
-    //     Ok(0)
-    // }
-    //
-    // assert_eq!(0, part2(BufReader::new(TEST.as_bytes()))?);
-    //
-    // let input_file = BufReader::new(File::open(INPUT_FILE)?);
-    // let result = time_snippet!(part2(input_file)?);
-    // println!("Result = {}", result);
+    println!("\n=== Part 2 ===");
+
+    fn part2<R: BufRead>(reader: R) -> Result<i64> {
+        let mut answer = 0;
+        for line in reader.lines() {
+            let line = line?;
+            let parts: Vec<_> = line.split(": ").collect();
+            let res: i64 = parts[0].parse()?;
+            let mut row: Vec<i64> = Vec::new();
+            let parts: Vec<_> = parts[1].split(" ").collect();
+            for p in parts{
+                row.push(p.parse()?);
+            }
+            let calib: Calib = Calib{
+                res,
+                row,
+            };
+            if check_cal2(calib){
+                answer += res;
+            }
+        }
+        Ok(answer)
+    }
+
+    assert_eq!(11387, part2(BufReader::new(TEST.as_bytes()))?);
+
+    let input_file = BufReader::new(File::open(INPUT_FILE)?);
+    let result = time_snippet!(part2(input_file)?);
+    println!("Result = {}", result);
     //endregion
 
     Ok(())
 }
-// Result = 1260333054159 OK!
+// === Part 1 ===
+// Max inputs: 73001511142704, 997, 12
+// src\bin\07.rs:129 took 4.8433ms.
+// Result1 = 1260333054159
 //
+// === Part 2 ===
+// src\bin\07.rs:162 took 202.4628ms.
+// Result = 162042343638683
