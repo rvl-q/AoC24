@@ -1,10 +1,8 @@
-// use std::collections::HashMap;
 use anyhow::*;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use code_timing_macros::time_snippet;
 use const_format::concatcp;
-// use itertools::Itertools;
 use adv_code_2024::*;
 
 const DAY: &str = "09"; // TODOne: Fill the day
